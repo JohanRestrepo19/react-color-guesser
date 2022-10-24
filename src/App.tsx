@@ -1,32 +1,62 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
+import { useEffect, useState } from 'react'
 import './App.css'
+import { getRandomHexaColor } from './utils/fuctions'
 
-function App() {
-  const [count, setCount] = useState(0)
+const App = () => {
+  const [frameColor, setFrameColor] = useState<string>('#fafafa')
+  const [hexaOptions, setHexaOptions] = useState<Array<string>>([])
+  const [optionSelected, setOptionSelected] = useState<string>('')
+  const [isCorrectAnswer, setIsCorrectAnswer] = useState<boolean | undefined>(
+    undefined
+  )
+
+  useEffect(() => {
+    setFrameColor(getRandomHexaColor())
+  }, [])
+
+  useEffect(() => {
+    const options = [
+      frameColor,
+      getRandomHexaColor(),
+      getRandomHexaColor(),
+    ].sort(() => 0.5 - Math.random())
+    setHexaOptions(options)
+  }, [frameColor])
+
+  useEffect(() => {
+    optionSelected === frameColor
+      ? setIsCorrectAnswer(true)
+      : setIsCorrectAnswer(false)
+  }, [optionSelected])
+
+  useEffect(() => {
+    isCorrectAnswer && setFrameColor(getRandomHexaColor())
+  }, [isCorrectAnswer])
+
+  const handleSelectOption = (color: string) => {
+    setOptionSelected(color)
+  }
 
   return (
-    <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div className="main-container">
+      {isCorrectAnswer ? <h3>Opcion correcta</h3> : <h3>Opcion Incorrecta</h3>}
+      <div
+        className="color-frame"
+        style={{ backgroundColor: frameColor }}
+      ></div>
+
+      <div className="options-container">
+        {hexaOptions.map(hexa => (
+          <button
+            className="option"
+            key={hexa}
+            value={hexa}
+            onClick={() => handleSelectOption(hexa)}
+          >
+            {hexa}
+          </button>
+        ))}
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </div>
   )
 }

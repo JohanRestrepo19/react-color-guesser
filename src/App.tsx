@@ -1,41 +1,9 @@
-import { useEffect, useState } from 'react'
 import './App.css'
-import { getRandomHexaColor } from './utils/fuctions'
+import { useColorGuesser } from './hooks/useColorGuesser'
 
 const App = () => {
-  const [frameColor, setFrameColor] = useState<string>('#fafafa')
-  const [hexaOptions, setHexaOptions] = useState<Array<string>>([])
-  const [optionSelected, setOptionSelected] = useState<string>('')
-  const [isCorrectAnswer, setIsCorrectAnswer] = useState<boolean | undefined>(
-    undefined
-  )
-
-  useEffect(() => {
-    setFrameColor(getRandomHexaColor())
-  }, [])
-
-  useEffect(() => {
-    const options = [
-      frameColor,
-      getRandomHexaColor(),
-      getRandomHexaColor(),
-    ].sort(() => 0.5 - Math.random())
-    setHexaOptions(options)
-  }, [frameColor])
-
-  useEffect(() => {
-    optionSelected === frameColor
-      ? setIsCorrectAnswer(true)
-      : setIsCorrectAnswer(false)
-  }, [optionSelected])
-
-  useEffect(() => {
-    isCorrectAnswer && setFrameColor(getRandomHexaColor())
-  }, [isCorrectAnswer])
-
-  const handleSelectOption = (color: string) => {
-    setOptionSelected(color)
-  }
+  const { frameColor, isCorrectAnswer, hexaOptions, handleSelectOption } =
+    useColorGuesser()
 
   return (
     <div className="main-container">

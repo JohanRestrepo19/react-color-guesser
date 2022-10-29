@@ -6,6 +6,10 @@ body {
   align-items: center;
 }
 
+h3 {
+  color: #000000;
+}
+
 .main-container {
   display: flex;
   flex-direction: column;
@@ -28,4 +32,5 @@ body {
 
 .option {
   background-color: #c4bbb9;
+  color: #000000;
 }
